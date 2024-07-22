@@ -15,7 +15,7 @@
             transform: translateX(-50%);
             width: 150px; /* Уменьшенный размер кнопки */
             height: 50px;
-            font-size: 18px; /* Уменьшенный размер текста */
+            font-size: 16px; /* Уменьшенный размер текста */
             background-color: #fff;
             color: #000;
             border: 2px solid #000;
@@ -29,8 +29,8 @@
 </head>
 <body>
     <model-viewer 
-        src="assets/models/Scaniverse_2024-07-15_170330.glb" 
-        alt="A 3D model of a sofa" 
+        id="model-viewer"
+        alt="A 3D model" 
         ar 
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
@@ -43,8 +43,14 @@
     <button class="ar-button" id="ar-button">Открыть</button>
 
     <script>
-        const modelViewer = document.querySelector('model-viewer');
+        const modelViewer = document.getElementById('model-viewer');
         const arButton = document.getElementById('ar-button');
+
+        // Получаем параметр URL для выбора модели
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb'; // Задаем модель по умолчанию
+
+        modelViewer.src = modelFile;
 
         arButton.addEventListener('click', () => {
             console.log('AR button clicked');
@@ -78,4 +84,5 @@
     </script>
 </body>
 </html>
+
 
