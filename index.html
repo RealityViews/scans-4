@@ -20,6 +20,24 @@
         ar-scale="auto" 
         ar-placement="floor">
     </model-viewer>
+
+    <script>
+        const modelViewer = document.querySelector('model-viewer');
+        
+        modelViewer.addEventListener('load', () => {
+            console.log('Model loaded');
+        });
+
+        modelViewer.addEventListener('ar-status', (event) => {
+            if (event.detail.status === 'failed') {
+                console.log('AR failed');
+            }
+        });
+
+        modelViewer.addEventListener('error', (event) => {
+            console.error('Error:', event.detail);
+        });
+    </script>
 </body>
 </html>
 
