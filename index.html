@@ -30,14 +30,23 @@
 <body>
     <model-viewer 
         id="model-viewer"
-        alt="A 3D model" 
+        src="assets/models/Scaniverse_2024-07-15_170330.glb"
+        alt="A 3D model of a sofa" 
         ar 
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
         auto-rotate 
         interaction-prompt="auto" 
         ar-scale="auto" 
-        ar-placement="floor">
+        ar-placement="floor"
+        exposure="1"
+        shadow-intensity="1"
+        shadow-softness="1"
+        environment-image="neutral"
+        poster="poster.jpg"
+        seamless-poster
+        reveal="auto"
+        preload>
     </model-viewer>
 
     <button class="ar-button" id="ar-button">Открыть</button>
@@ -84,5 +93,3 @@
     </script>
 </body>
 </html>
-
-
