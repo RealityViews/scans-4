@@ -8,6 +8,28 @@
     <style>
         body { margin: 0; overflow: hidden; }
         model-viewer { width: 100vw; height: 100vh; }
+        .ar-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px; /* Изначальный размер кнопки */
+            height: 60px;
+            font-size: 20px; /* Изначальный размер текста */
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Убедимся, что кнопка на переднем плане */
+        }
+        .ar-button.large {
+            width: 600px; /* Увеличенный размер кнопки */
+            height: 180px;
+            font-size: 60px; /* Увеличенный размер текста */
+        }
     </style>
 </head>
 <body>
@@ -23,8 +45,16 @@
         ar-placement="floor">
     </model-viewer>
 
+    <button class="ar-button large" id="ar-button">View in AR</button>
+
     <script>
         const modelViewer = document.querySelector('model-viewer');
+        const arButton = document.getElementById('ar-button');
+
+        arButton.addEventListener('click', () => {
+            console.log('AR button clicked');
+            modelViewer.activateAR();
+        });
 
         modelViewer.addEventListener('load', () => {
             console.log('Model loaded');
