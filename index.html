@@ -2,18 +2,14 @@
 <html>
 <head>
     <title>AR Viewer</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@xrengine/aframe-webxr@1.0.0/dist/aframe-webxr.min.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        model-viewer { width: 100vw; height: 100vh; }
+    </style>
 </head>
-<body style="margin: 0; overflow: hidden;">
-    <a-scene vr-mode-ui="enabled: false" embedded webxr="optionalFeatures: hit-test, local-floor, bounded-floor, dom-overlay; overlayElement: #overlay;">
-        <a-assets>
-            <a-asset-item id="model" src="assets/models/Scaniverse_2024-07-15_170330.glb"></a-asset-item>
-        </a-assets>
-        <a-entity id="ar-model" gltf-model="#model" scale="0.5 0.5 0.5" position="0 0 0"></a-entity>
-        <a-camera-static></a-camera-static>
-        <div id="overlay"></div>
-    </a-scene>
+<body>
+    <model-viewer src="assets/models/Scaniverse_2024-07-15_170330.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate>
+    </model-viewer>
 </body>
 </html>
