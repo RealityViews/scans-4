@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>AR Viewer</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
@@ -30,15 +31,25 @@
         });
 
         modelViewer.addEventListener('ar-status', (event) => {
+            console.log('AR status changed:', event.detail.status);
             if (event.detail.status === 'failed') {
                 console.log('AR failed');
+            } else if (event.detail.status === 'session-started') {
+                console.log('AR session started');
             }
         });
 
         modelViewer.addEventListener('error', (event) => {
             console.error('Error:', event.detail);
         });
+
+        modelViewer.addEventListener('ar-button-tapped', () => {
+            console.log('AR button tapped');
+        });
+
+        modelViewer.addEventListener('ar-button-text', (event) => {
+            console.log('AR button text:', event.detail.text);
+        });
     </script>
 </body>
 </html>
-
