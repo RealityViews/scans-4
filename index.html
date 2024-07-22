@@ -13,9 +13,9 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px; /* Уменьшенный размер кнопки */
+            width: 150px;
             height: 50px;
-            font-size: 16px; /* Уменьшенный размер текста */
+            font-size: 16px;
             background-color: #fff;
             color: #000;
             border: 2px solid #000;
@@ -23,7 +23,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10; /* Убедимся, что кнопка на переднем плане */
+            z-index: 10;
         }
     </style>
 </head>
@@ -37,12 +37,12 @@
         camera-controls 
         auto-rotate 
         interaction-prompt="auto" 
-        ar-scale="auto" 
+        ar-scale="auto"
         ar-placement="floor"
-        exposure="1"
-        shadow-intensity="1"
-        shadow-softness="1"
-        environment-image="neutral"
+        exposure="1.5"                <!-- Увеличиваем экспозицию для повышения яркости -->
+        shadow-intensity="2"          <!-- Увеличиваем интенсивность теней -->
+        shadow-softness="0.5"         <!-- Уменьшаем мягкость теней -->
+        environment-image="path/to/high_quality_environment.hdr" <!-- Используем качественное HDR изображение -->
         poster="poster.jpg"
         seamless-poster
         reveal="auto"
@@ -55,14 +55,12 @@
         const modelViewer = document.getElementById('model-viewer');
         const arButton = document.getElementById('ar-button');
 
-        // Получаем параметр URL для выбора модели
         const urlParams = new URLSearchParams(window.location.search);
-        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb'; // Задаем модель по умолчанию
+        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb';
 
         modelViewer.src = modelFile;
 
         arButton.addEventListener('click', () => {
-            console.log('AR button clicked');
             modelViewer.activateAR();
         });
 
