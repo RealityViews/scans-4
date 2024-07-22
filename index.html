@@ -13,9 +13,9 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 200px; /* Изначальный размер кнопки */
-            height: 60px;
-            font-size: 20px; /* Изначальный размер текста */
+            width: 150px; /* Уменьшенный размер кнопки */
+            height: 50px;
+            font-size: 18px; /* Уменьшенный размер текста */
             background-color: #fff;
             color: #000;
             border: 2px solid #000;
@@ -24,11 +24,6 @@
             align-items: center;
             justify-content: center;
             z-index: 10; /* Убедимся, что кнопка на переднем плане */
-        }
-        .ar-button.large {
-            width: 600px; /* Увеличенный размер кнопки */
-            height: 180px;
-            font-size: 60px; /* Увеличенный размер текста */
         }
     </style>
 </head>
@@ -45,7 +40,7 @@
         ar-placement="floor">
     </model-viewer>
 
-    <button class="ar-button large" id="ar-button">Показать</button>
+    <button class="ar-button" id="ar-button">Открыть</button>
 
     <script>
         const modelViewer = document.querySelector('model-viewer');
@@ -83,3 +78,4 @@
     </script>
 </body>
 </html>
+
