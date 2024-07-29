@@ -26,7 +26,9 @@
 </head>
 <body>
     <button id="start-button">Start AR</button>
-    <a-scene embedded arjs='trackingMethod: best;'>
+    <a-scene embedded arjs='trackingMethod: best;' style="display:none;">
+        <!-- Debugging element -->
+        <a-box position="0 0 -5" rotation="0 45 0" color="#4CC3D9"></a-box>
         <a-marker preset="hiro">
             <a-entity gltf-model="https://alexanderkuchma.github.io/scans-4/assets/models/Scaniverse_2024-07-15_170330.glb" scale="0.2 0.2 0.2"></a-entity>
         </a-marker>
