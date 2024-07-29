@@ -26,18 +26,17 @@
         
         <a-assets timeout="10000">
             <a-asset-item id="model1" src="https://alexanderkuchma.github.io/scans-4/assets/models/Scaniverse_2024-07-15_170330.glb"></a-asset-item>
-            <a-asset-item id="model2" src="https://alexanderkuchma.github.io/scans-4/assets/models/model2.glb"></a-asset-item>
             <!-- Добавьте остальные модели здесь -->
         </a-assets>
         
-        <a-camera position="0 0 0">
-            <a-entity id="model-preview" gltf-model="#model1" scale="0.2 0.2 0.2"></a-entity>
+        <a-camera position="0 1.6 0">
+            <a-cursor></a-cursor>
         </a-camera>
         
-        <a-entity light="type: directional; intensity: 0.8;" position="1 1 1"></a-entity>
         <a-light type="ambient" intensity="0.7"></a-light>
+        <a-light type="directional" intensity="0.8" position="1 1 1"></a-light>
         
-        <a-entity id="model" gltf-model="#model1" position="0 0 -5" scale="0.5 0.5 0.5" xrextras-two-finger-rotate xrextras-pinch-scale></a-entity>
+        <a-entity gltf-model="#model1" position="0 0 -3" scale="0.5 0.5 0.5" xrextras-two-finger-rotate xrextras-pinch-scale></a-entity>
     </a-scene>
     
     <script>
@@ -48,4 +47,3 @@
     </script>
 </body>
 </html>
-
