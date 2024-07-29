@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR with ARToolKit</title>
-    <script src="https://cdn.rawgit.com/artoolkitx/artoolkit5/master/aframe/build/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/artoolkitx/artoolkit5/master/aframe/build/aframe-artoolkit.js"></script>
+    <title>AR with A-Frame</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-artoolkit@1.1.0/dist/aframe-artoolkit.min.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
         #start-button {
@@ -27,7 +27,6 @@
 <body>
     <button id="start-button">Start AR</button>
     <a-scene embedded arjs='trackingMethod: best;'>
-        <!-- Define marker for ARToolkit -->
         <a-marker preset="hiro">
             <a-entity gltf-model="https://alexanderkuchma.github.io/scans-4/assets/models/Scaniverse_2024-07-15_170330.glb" scale="0.2 0.2 0.2"></a-entity>
         </a-marker>
@@ -42,4 +41,3 @@
     </script>
 </body>
 </html>
-
