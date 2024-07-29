@@ -1,93 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>AR Viewer</title>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        model-viewer { width: 100vw; height: 100vh; }
-        .ar-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 50px;
-            font-size: 16px;
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #000;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-    <model-viewer 
-        id="model-viewer"
-        src="assets/models/Scaniverse_2024-07-15_170330.glb"
-        alt="A 3D model of a sofa" 
-        ar 
-        ar-modes="webxr scene-viewer quick-look" 
-        camera-controls 
-        auto-rotate 
-        interaction-prompt="auto" 
-        ar-scale="auto"
-        ar-placement="floor"
-        exposure="1.5"                <!-- Увеличиваем экспозицию для повышения яркости -->
-        shadow-intensity="2"          <!-- Увеличиваем интенсивность теней -->
-        shadow-softness="0.5"         <!-- Уменьшаем мягкость теней -->
-        environment-image="path/to/high_quality_environment.hdr" <!-- Используем качественное HDR изображение -->
-        poster="poster.jpg"
-        seamless-poster
-        reveal="auto"
-        preload>
-    </model-viewer>
+    <title>AR Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <button class="ar-button" id="ar-button">Открыть</button>
+    <script crossorigin="anonymous" src="https://cdn.8thwall.com/web/hosting/app8-kqh3yxpq.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+
+    <style>
+      body { margin: 0; }
+      #splash-background { display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; color: #fff; }
+      #start { cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <div id="splash-background">
+      <div id="start"><h2>Start AR</h2></div>
+    </div>
+
+    <a-scene
+      id='scene'
+      xrextras-gesture-detector
+      xrextras-loading
+      xrextras-runtime-error
+      renderer="colorManagement: true"
+      style="display: none;">
+      
+      <a-assets>
+        <!-- Ссылки на ваши модели в репозитории GitHub -->
+        <a-asset-item id="model1" src="https://alexanderkuchma.github.io/scans-4/assets/models/model1.glb"></a-asset-item>
+        <a-asset-item id="model2" src="https://alexanderkuchma.github.io/scans-4/assets/models/model2.glb"></a-asset-item>
+        <!-- Добавьте остальные модели здесь -->
+      </a-assets>
+
+      <a-camera position="0 0 0">
+        <a-entity id="model-preview" gltf-model="#model1" scale="0.2 0.2 0.2"></a-entity>
+      </a-camera>
+
+      <a-entity light="type: directional; intensity: 0.8;" position="1 1 1"></a-entity>
+      <a-light type="ambient" intensity="0.7"></a-light>
+
+      <a-entity id="model" gltf-model="#model1" position="0 0 -5" scale="0.5 0.5 0.5" xrextras-two-finger-rotate xrextras-pinch-scale></a-entity>
+    </a-scene>
 
     <script>
-        const modelViewer = document.getElementById('model-viewer');
-        const arButton = document.getElementById('ar-button');
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb';
-
-        modelViewer.src = modelFile;
-
-        arButton.addEventListener('click', () => {
-            modelViewer.activateAR();
-        });
-
-        modelViewer.addEventListener('load', () => {
-            console.log('Model loaded');
-        });
-
-        modelViewer.addEventListener('ar-status', (event) => {
-            console.log('AR status changed:', event.detail.status);
-            if (event.detail.status === 'failed') {
-                console.log('AR failed');
-            } else if (event.detail.status === 'session-started') {
-                console.log('AR session started');
-            }
-        });
-
-        modelViewer.addEventListener('error', (event) => {
-            console.error('Error:', event.detail);
-        });
-
-        modelViewer.addEventListener('ar-button-tapped', () => {
-            console.log('AR button tapped');
-        });
-
-        modelViewer.addEventListener('ar-button-text', (event) => {
-            console.log('AR button text:', event.detail.text);
-        });
+      document.getElementById('start').addEventListener('click', () => {
+        document.getElementById('splash-background').style.display = 'none';
+        document.getElementById('scene').style.display = 'block';
+      });
     </script>
-</body>
+  </body>
 </html>
