@@ -1,45 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>AR Viewer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR with A-Frame</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-artoolkit@1.1.0/dist/aframe-artoolkit.min.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
-        #start-button {
+        model-viewer { width: 100vw; height: 100vh; }
+        .ar-button {
             position: absolute;
-            top: 50%;
+            bottom: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 10px 20px;
-            font-size: 24px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+            transform: translateX(-50%);
+            width: 150px; /* Уменьшенный размер кнопки */
+            height: 50px;
+            font-size: 16px; /* Уменьшенный размер текста */
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
             border-radius: 5px;
-            cursor: pointer;
-            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Убедимся, что кнопка на переднем плане */
         }
     </style>
 </head>
 <body>
-    <button id="start-button">Start AR</button>
-    <a-scene embedded arjs='trackingMethod: best;' style="display:none;">
-        <!-- Debugging element -->
-        <a-box position="0 0 -5" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-marker preset="hiro">
-            <a-entity gltf-model="https://alexanderkuchma.github.io/scans-4/assets/models/Scaniverse_2024-07-15_170330.glb" scale="0.2 0.2 0.2"></a-entity>
-        </a-marker>
-        <a-entity camera></a-entity>
-    </a-scene>
+    <model-viewer 
+        id="model-viewer"
+        alt="A 3D model" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        auto-rotate 
+        interaction-prompt="auto" 
+        ar-scale="auto" 
+        ar-placement="floor">
+    </model-viewer>
+
+    <button class="ar-button" id="ar-button">Открыть</button>
 
     <script>
-        document.getElementById('start-button').addEventListener('click', function () {
-            this.style.display = 'none';
-            document.querySelector('a-scene').style.display = 'block';
+        const modelViewer = document.getElementById('model-viewer');
+        const arButton = document.getElementById('ar-button');
+
+        // Получаем параметр URL для выбора модели
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb'; // Задаем модель по умолчанию
+
+        modelViewer.src = modelFile;
+
+        arButton.addEventListener('click', () => {
+            console.log('AR button clicked');
+            modelViewer.activateAR();
+        });
+
+        modelViewer.addEventListener('load', () => {
+            console.log('Model loaded');
+        });
+
+        modelViewer.addEventListener('ar-status', (event) => {
+            console.log('AR status changed:', event.detail.status);
+            if (event.detail.status === 'failed') {
+                console.log('AR failed');
+            } else if (event.detail.status === 'session-started') {
+                console.log('AR session started');
+            }
+        });
+
+        modelViewer.addEventListener('error', (event) => {
+            console.error('Error:', event.detail);
+        });
+
+        modelViewer.addEventListener('ar-button-tapped', () => {
+            console.log('AR button tapped');
+        });
+
+        modelViewer.addEventListener('ar-button-text', (event) => {
+            console.log('AR button text:', event.detail.text);
         });
     </script>
 </body>
 </html>
+
+
+
