@@ -48,10 +48,9 @@
 
         // Получаем параметр URL для выбора модели
         const urlParams = new URLSearchParams(window.location.search);
-        const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb'; // Задаем модель по умолчанию
-        const modelPath = `assets/models/${modelFile}`; // Указываем путь к моделям
+        const modelFile = urlParams.get('model') || 'assets/models/Scaniverse_2024-07-15_170330.glb'; // Задаем модель по умолчанию
 
-        modelViewer.src = modelPath;
+        modelViewer.src = modelFile;
 
         arButton.addEventListener('click', () => {
             console.log('AR button clicked');
