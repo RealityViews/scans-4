@@ -65,29 +65,9 @@
         modelViewer.src = modelPath;
 
         // Обработчик клика на кнопку AR
-        arButton.addEventListener('click', async () => {
+        arButton.addEventListener('click', () => {
             console.log('AR button clicked');
-
-            // Проверяем, доступен ли XR режим
-            if (!navigator.xr) {
-                console.error('WebXR не поддерживается в этом браузере.');
-                alert('Ваш браузер не поддерживает AR через WebXR.');
-                return;
-            }
-
-            try {
-                if (modelViewer.hasSessionMode('immersive-ar')) {
-                    console.log('Попытка входа в AR...');
-                    await modelViewer.enterXR({ mode: 'immersive-ar' }); // Входим в AR режим
-                    console.log('AR успешно запущен.');
-                } else {
-                    console.error('AR не поддерживается на этом устройстве.');
-                    alert('AR не поддерживается на вашем устройстве.');
-                }
-            } catch (error) {
-                console.error('Ошибка при входе в AR:', error.message);
-                alert('Произошла ошибка при запуске AR.');
-            }
+            modelViewer.enterXR(); // Просто вызываем enterXR()
         });
 
         // Ограничение вращения только по горизонтали
@@ -100,27 +80,6 @@
 
             // Обновляем lastTheta для следующего шага
             lastTheta = theta;
-        });
-
-        // Событие загрузки модели
-        modelViewer.addEventListener('load', () => {
-            console.log('Model loaded');
-        });
-
-        // События AR
-        modelViewer.addEventListener('xr-session-state-changed', (event) => {
-            console.log('AR session state changed:', event.detail.state);
-            if (event.detail.state === 'ended') {
-                console.log('AR session ended');
-            } else if (event.detail.state === 'starting') {
-                console.log('AR session starting');
-            } else if (event.detail.state === 'started') {
-                console.log('AR session started');
-            }
-        });
-
-        modelViewer.addEventListener('error', (event) => {
-            console.error('Error:', event.detail);
         });
     </script>
 </body>
