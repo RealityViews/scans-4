@@ -4,7 +4,7 @@
     <title>AR Viewer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="https://unpkg.com/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
         model-viewer { width: 100vw; height: 100vh; }
@@ -34,21 +34,26 @@
         ar 
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
+        tone-mapping="neutral" 
+        poster="poster.webp" 
+        shadow-intensity="1" 
+        exposure="0.72" 
+        min-camera-orbit="auto 74deg 3.873m" 
+        max-camera-orbit="auto 74deg auto" 
+        min-field-of-view="23.54deg" 
+        shadow-softness="1" 
         auto-rotate 
         interaction-prompt="auto" 
-        ar-scale="auto" 
+        ar-scale="fixed" 
         ar-placement="floor">
     </model-viewer>
-
     <button class="ar-button" id="ar-button">Открыть</button>
-
     <script>
         const modelViewer = document.getElementById('model-viewer');
         const arButton = document.getElementById('ar-button');
         const urlParams = new URLSearchParams(window.location.search);
         const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb'; 
         const modelPath = `assets/models/${modelFile}`; 
-
         modelViewer.src = modelPath;
 
         arButton.addEventListener('click', () => {
