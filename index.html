@@ -54,28 +54,37 @@
         
         // Получение параметра из URL или использование значения по умолчанию
         const urlParams = new URLSearchParams(window.location.search);
-        const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb'; 
+        const modelFile = urlParams.get('model') || 'cube.glb'; 
         const modelPath = `assets/models/${modelFile}`; 
 
         // Загрузка модели
         modelViewer.src = modelPath;
 
         // Обработчик клика на кнопку AR
-        arButton.addEventListener('click', () => {
+        arButton.addEventListener('click', async () => {
             console.log('AR button clicked');
-            modelViewer.enterXR(); // В версии 4.0.0 метод activateAR() заменен на enterXR()
+            try {
+                // Проверяем, доступен ли XR режим
+                if (modelViewer.hasSessionMode('immersive-ar')) {
+                    await modelViewer.enterXR({ mode: 'immersive-ar' }); // Входим в AR режим
+                } else {
+                    console.error('AR не поддерживается на этом устройстве.');
+                }
+            } catch (error) {
+                console.error('Ошибка при входе в AR:', error);
+            }
         });
 
         // Ограничение вращения только по горизонтали
-        let lastYaw = 0; // Сохраняем последний угол yaw (вращение вокруг оси Y)
+        let lastTheta = 0; // Сохраняем последний угол theta (горизонтальное вращение)
         modelViewer.addEventListener('camera-orbit-changed', (event) => {
             const { phi, theta } = event.detail; // Углы вращения (phi - вертикальное, theta - горизонтальное)
 
             // Фиксируем вертикальное вращение (phi), оставляя только горизонтальное (theta)
-            modelViewer.cameraOrbit = `${lastYaw}deg 0deg 3m`; // Устанавливаем yaw и фиксируем pitch
+            modelViewer.cameraOrbit = `${theta}deg 0deg 3m`; // Устанавливаем yaw и фиксируем pitch
 
-            // Обновляем lastYaw для следующего шага
-            lastYaw = theta;
+            // Обновляем lastTheta для следующего шага
+            lastTheta = theta;
         });
 
         // Событие загрузки модели
