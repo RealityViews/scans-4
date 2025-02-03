@@ -4,10 +4,17 @@
     <title>AR Viewer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+    <!-- Подключение model-viewer версии 4.0.0 -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; overflow: hidden; }
-        model-viewer { width: 100vw; height: 100vh; }
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+        }
+        model-viewer { 
+            width: 100vw; 
+            height: 100vh; 
+        }
         .ar-button {
             position: absolute;
             bottom: 20px;
@@ -32,53 +39,64 @@
         id="model-viewer"
         alt="A 3D model" 
         ar 
-        ar-modes="webxr" <!-- Используем только WebXR -->
+        ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
-        auto-rotate 
+        auto-rotate="false" 
         interaction-prompt="auto" 
-        ar-scale="auto" 
-        ar-placement="floor">
+        ar-scale="fixed" 
+        ar-placement="floor"
+        environment-image="neutral">
     </model-viewer>
-
     <button class="ar-button" id="ar-button">Открыть</button>
-
     <script>
         const modelViewer = document.getElementById('model-viewer');
         const arButton = document.getElementById('ar-button');
+        
+        // Получение параметра из URL или использование значения по умолчанию
         const urlParams = new URLSearchParams(window.location.search);
         const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb'; 
         const modelPath = `assets/models/${modelFile}`; 
 
+        // Загрузка модели
         modelViewer.src = modelPath;
 
+        // Обработчик клика на кнопку AR
         arButton.addEventListener('click', () => {
             console.log('AR button clicked');
-            modelViewer.activateAR();
+            modelViewer.enterXR(); // В версии 4.0.0 метод activateAR() заменен на enterXR()
         });
 
+        // Ограничение вращения только по горизонтали
+        let lastYaw = 0; // Сохраняем последний угол yaw (вращение вокруг оси Y)
+        modelViewer.addEventListener('camera-orbit-changed', (event) => {
+            const { phi, theta } = event.detail; // Углы вращения (phi - вертикальное, theta - горизонтальное)
+
+            // Фиксируем вертикальное вращение (phi), оставляя только горизонтальное (theta)
+            modelViewer.cameraOrbit = `${lastYaw}deg 0deg 3m`; // Устанавливаем yaw и фиксируем pitch
+
+            // Обновляем lastYaw для следующего шага
+            lastYaw = theta;
+        });
+
+        // Событие загрузки модели
         modelViewer.addEventListener('load', () => {
             console.log('Model loaded');
         });
 
-        modelViewer.addEventListener('ar-status', (event) => {
-            console.log('AR status changed:', event.detail.status);
-            if (event.detail.status === 'failed') {
-                console.log('AR failed');
-            } else if (event.detail.status === 'session-started') {
+        // События AR
+        modelViewer.addEventListener('xr-session-state-changed', (event) => {
+            console.log('AR session state changed:', event.detail.state);
+            if (event.detail.state === 'ended') {
+                console.log('AR session ended');
+            } else if (event.detail.state === 'starting') {
+                console.log('AR session starting');
+            } else if (event.detail.state === 'started') {
                 console.log('AR session started');
             }
         });
 
         modelViewer.addEventListener('error', (event) => {
             console.error('Error:', event.detail);
-        });
-
-        modelViewer.addEventListener('ar-button-tapped', () => {
-            console.log('AR button tapped');
-        });
-
-        modelViewer.addEventListener('ar-button-text', (event) => {
-            console.log('AR button text:', event.detail.text);
         });
     </script>
 </body>
