@@ -67,15 +67,26 @@
         // Обработчик клика на кнопку AR
         arButton.addEventListener('click', async () => {
             console.log('AR button clicked');
+
+            // Проверяем, доступен ли XR режим
+            if (!navigator.xr) {
+                console.error('WebXR не поддерживается в этом браузере.');
+                alert('Ваш браузер не поддерживает AR через WebXR.');
+                return;
+            }
+
             try {
-                // Проверяем, доступен ли XR режим
                 if (modelViewer.hasSessionMode('immersive-ar')) {
+                    console.log('Попытка входа в AR...');
                     await modelViewer.enterXR({ mode: 'immersive-ar' }); // Входим в AR режим
+                    console.log('AR успешно запущен.');
                 } else {
                     console.error('AR не поддерживается на этом устройстве.');
+                    alert('AR не поддерживается на вашем устройстве.');
                 }
             } catch (error) {
-                console.error('Ошибка при входе в AR:', error);
+                console.error('Ошибка при входе в AR:', error.message);
+                alert('Произошла ошибка при запуске AR.');
             }
         });
 
