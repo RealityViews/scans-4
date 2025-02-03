@@ -32,6 +32,10 @@
             justify-content: center;
             z-index: 10; 
         }
+        /* Скрываем встроенную кнопку AR */
+        model-viewer ::slotted(button) {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
