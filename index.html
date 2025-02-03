@@ -32,10 +32,6 @@
             justify-content: center;
             z-index: 10; 
         }
-        /* Скрываем встроенную кнопку AR */
-        model-viewer ::slotted(button) {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
@@ -65,9 +61,18 @@
         modelViewer.src = modelPath;
 
         // Обработчик клика на кнопку AR
-        arButton.addEventListener('click', () => {
-            console.log('AR button clicked');
-            modelViewer.enterXR(); // Просто вызываем enterXR()
+        arButton.addEventListener('click', async () => {
+            console.log('Custom AR button clicked');
+            try {
+                // Проверяем, доступен ли режим AR
+                if (modelViewer.hasSessionMode('immersive-ar')) {
+                    await modelViewer.enterXR({ mode: 'immersive-ar' }); // Запускаем AR
+                } else {
+                    console.error('AR не поддерживается на этом устройстве.');
+                }
+            } catch (error) {
+                console.error('Ошибка при запуске AR:', error.message);
+            }
         });
 
         // Ограничение вращения только по горизонтали
