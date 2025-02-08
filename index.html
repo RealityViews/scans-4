@@ -55,7 +55,7 @@
             BABYLON.SceneLoader.Append("", modelPath, scene, (newScene) => {
                 console.log('Model loaded');
                 newScene.meshes.forEach((mesh) => {
-                    mesh.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1); // Масштабирование модели
+                    mesh.scaling = new BABYLON.Vector3(1, 1, 1); // Масштабирование модели
                 });
             });
 
