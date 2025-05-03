@@ -1,102 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AR Viewer</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
-<style>
-/* Добавляем стиль для фона */
-body {
-  margin: 0;
-  overflow: hidden;
-  background-color: #121212; /* Темно-серый фон */
-  color: #ffffff; /* Цвет текста (если есть) */
-}
-
-model-viewer {
-  width: 100vw;
-  height: 100vh;
-  background-color: transparent; /* Убедитесь, что фон model-viewer прозрачен */
-}
-
-.ar-button {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px;
-  height: 50px;
-  font-size: 16px;
-  background-color: #fff;
-  color: #000;
-  border: 2px solid #000;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-</style>
+  <title>AR Viewer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Подключение библиотеки model-viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+  <style>
+    /* Стили для body и model-viewer */
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
+    /* Стили для кнопки AR */
+    .ar-button {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 50px;
+      font-size: 16px;
+      background-color: #fff;
+      color: #000;
+      border: 2px solid #000;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-<model-viewer
-  id="model-viewer"
-  alt="A 3D model"
-  ar
-  ar-modes="webxr scene-viewer quick-look"
-  camera-controls
-  tone-mapping="neutral"
-  poster="poster.webp"
-  shadow-intensity="1"
-  exposure="0.72"
-  min-camera-orbit="auto 74deg 3.873m"
-  max-camera-orbit="auto 74deg auto"
-  min-field-of-view="23.54deg"
-  shadow-softness="1"
-  auto-rotate
-  interaction-prompt="auto"
-  ar-scale="fixed"
-  ar-placement="floor">
-</model-viewer>
-<button class="ar-button" id="ar-button">Примерить в комнате</button>
-<script>
-const modelViewer = document.getElementById('model-viewer');
-const arButton = document.getElementById('ar-button');
-const urlParams = new URLSearchParams(window.location.search);
-const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb';
-const modelPath = `assets/models/${modelFile}`;
-modelViewer.src = modelPath;
+  <!-- Элемент model-viewer -->
+  <model-viewer
+      id="model-viewer"
+      alt="A 3D model"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      tone-mapping="neutral"
+      shadow-intensity="1"
+      exposure="0.72"
+      min-camera-orbit="auto 74deg 3.873m"
+      max-camera-orbit="auto 74deg auto"
+      min-field-of-view="23.54deg"
+      shadow-softness="1"
+      auto-rotate
+      interaction-prompt="auto"
+      ar-scale="fixed"
+      ar-placement="floor"
+      position="0m 0m 0m"
+      scale="1 1 1"
+      camera-orbit="0deg 75deg 1.5m"
+      field-of-view="45deg">
+  </model-viewer>
 
-arButton.addEventListener('click', () => {
-  console.log('AR button clicked');
-  modelViewer.activateAR();
-});
+  <!-- Кнопка для активации AR -->
+  <button class="ar-button" id="ar-button">Примерить в комнате</button>
 
-modelViewer.addEventListener('load', () => {
-  console.log('Model loaded');
-});
+  <script>
+    // Получаем элементы model-viewer и кнопки AR
+    const modelViewer = document.getElementById('model-viewer');
+    const arButton = document.getElementById('ar-button');
 
-modelViewer.addEventListener('ar-status', (event) => {
-  console.log('AR status changed:', event.detail.status);
-  if (event.detail.status === 'failed') {
-    console.log('AR failed');
-  } else if (event.detail.status === 'session-started') {
-    console.log('AR session started');
-  }
-});
+    // Получаем параметр модели из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelFile = urlParams.get('model') || 'Scaniverse_2024-07-15_170330.glb';
+    const modelPath = `assets/models/${modelFile}`;
 
-modelViewer.addEventListener('error', (event) => {
-  console.error('Error:', event.detail);
-});
+    // Загружаем модель
+    fetch(modelPath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Model file not found: ${modelPath}`);
+            }
+            return response;
+        })
+        .then(() => {
+            modelViewer.src = modelPath;
+        })
+        .catch(error => {
+            console.error(error);
+            alert(`Ошибка: Модель не найдена (${modelPath}).`);
+        });
 
-modelViewer.addEventListener('ar-button-tapped', () => {
-  console.log('AR button tapped');
-});
+    // Обработка событий
+    modelViewer.addEventListener('load', () => {
+        console.log('Model loaded');
+    });
 
-modelViewer.addEventListener('ar-button-text', (event) => {
-  console.log('AR button text:', event.detail.text);
-});
-</script>
+    modelViewer.addEventListener('error', (event) => {
+        console.error('Error loading model:', event.detail);
+        alert(`Ошибка: ${event.detail.message}`);
+    });
+
+    arButton.addEventListener('click', () => {
+        if (modelViewer.canActivateAR) {
+            modelViewer.activateAR();
+        } else {
+            alert('AR не поддерживается на этом устройстве.');
+        }
+    });
+
+    modelViewer.addEventListener('ar-status', (event) => {
+        console.log('AR status changed:', event.detail.status);
+        if (event.detail.status === 'failed') {
+            console.log('AR failed');
+        } else if (event.detail.status === 'session-started') {
+            console.log('AR session started');
+        }
+    });
+
+    modelViewer.addEventListener('ar-button-tapped', () => {
+        console.log('AR button tapped');
+    });
+
+    modelViewer.addEventListener('ar-button-text', (event) => {
+        console.log('AR button text:', event.detail.text);
+    });
+  </script>
 </body>
 </html>
